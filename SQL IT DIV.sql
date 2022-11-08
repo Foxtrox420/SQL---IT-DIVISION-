@@ -2,9 +2,6 @@
 GO
 USE KennardNetflox
 
-TRUNCATE TABLE 
-GO
-
 CREATE TABLE MsGenre
 (
 	GenreID VARCHAR(6) PRIMARY KEY,
