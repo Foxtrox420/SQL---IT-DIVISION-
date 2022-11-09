@@ -1,6 +1,7 @@
-﻿CREATE DATABASE KennardNetflox
+CREATE DATABASE KennardNetflox
 GO
 USE KennardNetflox
+
 
 CREATE TABLE MsGenre
 (
@@ -241,6 +242,36 @@ FETCH NEXT 5 ROWS ONLY; --Number 11
 
 SELECT YEAR(OrderDate) AS FilmYear, COUNT(DISTINCT OrderDate) AS CountData From TrOrder --Number 12 
 GROUP BY YEAR(OrderDate)
+
+SELECT TrOrder.OrderID, OrderDate, CONCAT(FirstName, ' ', LastName) as CustomerName, Title, RentalDuration From TrOrder --Number 13
+JOIN MsCustomer ON MsCustomer.CustomerID = TrOrder.CustomerID
+JOIN TrOrderDetail ON TrOrder.OrderID = TrOrderDetail.OrderID
+JOIN MsFilms ON MsFilms.FilmID = TrOrderDetail.FilmID
+WHERE RIGHT(MsCustomer.CustomerID,1) = 1 
+
+SELECT Title, GenreName, ReleaseDate, Synopsis, Director From MsFilms
+JOIN MsGenre ON MsGenre.GenreID = MsFilms.GenreID
+JOIN MsRegion ON MsRegion.RegionID = MsFilms.RegionID
+WHERE RIGHT(MsRegion.RegionID, 1) = 3 AND RIGHT(MsGenre.GenreID, 1) = 2
+ORDER BY Director DESC
+SELECT Title, GenreName, ReleaseDate, Synopsis, Director From MsFilms
+JOIN MsGenre ON MsGenre.GenreID = MsFilms.GenreID
+JOIN MsRegion ON MsRegion.RegionID = MsFilms.RegionID
+WHERE RIGHT(MsRegion.RegionID, 1) = 3 
+ORDER BY Director DESC --Number 14 
+
+SELECT TrOrder.OrderID, OrderDate, Title, CONCAT(YEAR(ReleaseDate), ' : ',Director) As ReleaseDetail,RentalDuration From TrOrder
+JOIN TrOrderDetail ON TrOrder.OrderID = TrOrderDetail.OrderID 
+JOIN MsFilms ON MsFilms.FilmID = TrOrderDetail.FilmID
+WHERE RIGHT(TrOrder.OrderID, 2) = 02 
+GROUP BY TrOrder.OrderID, OrderDate, Title, ReleaseDate, Director, RentalDuration
+SELECT TrOrder.OrderID, OrderDate, Title, CONCAT(YEAR(ReleaseDate), ' : ',Director) As ReleaseDetail,RentalDuration From TrOrder
+JOIN TrOrderDetail ON TrOrder.OrderID = TrOrderDetail.OrderID 
+JOIN MsFilms ON MsFilms.FilmID = TrOrderDetail.FilmID
+WHERE RIGHT(TrOrderDetail.OrderDetailID, 2) = 04
+GROUP BY TrOrder.OrderID, OrderDate, Title, ReleaseDate, Director, RentalDuration --Number 15
+
+
 
 --SELECT Year(MsFilms.ReleaseDate) As 'Film Year', COUNT(TrOrderDetail.RentalDuration) As 'Count Data' From MsFilms
 --JOIN TrOrderDetail ON TrOrderDetail.FilmID = MsFilms.FilmID
