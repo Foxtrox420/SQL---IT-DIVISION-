@@ -1,7 +1,8 @@
 CREATE DATABASE KennardNetflox
 GO
-USE KennardNetflox
+USE KennardNetflox  --EXECUTE FROM CREATE DATABASE TO USE KENNARDNETFLOX 
 
+--EXECUTE THE CREATE TABLES AND INPUTS UNTIL THE NEXT GO 
 CREATE TABLE MsGenre
 (
 	GenreID VARCHAR(6) PRIMARY KEY,
@@ -176,6 +177,9 @@ insert into TrOrderDetail values ('OD028','TO014','MF002',2)--2021
 insert into TrOrderDetail values ('OD029','TO015','MF008',3)
 insert into TrOrderDetail values ('OD030','TO015','MF006',1)
 
+GO
+
+-- FOR EACH PROCEDURES, EXECUTE UNTIL GO 
 
 CREATE PROCEDURE GetTopFiveFilms -- FOR NUMBER 11 
 AS
@@ -186,12 +190,13 @@ GROUP BY Title, Synopsis, RentalDuration
 ORDER BY Title ASC, AVG(RentalDuration) DESC
 OFFSET 0 Rows
 FETCH NEXT 5 ROWS ONLY;
+GO
 
 CREATE PROCEDURE GetYearTotalFilm -- FOR NUMBER 12 
 AS
 SELECT YEAR(OrderDate) AS FilmYear, COUNT(DISTINCT OrderDate) AS CountData From TrOrder --Number 12 
 GROUP BY YEAR(OrderDate)
-
+GO
 
 CREATE PROCEDURE GetOrderByCustomer @CustomerID nvarchar(6)
 AS
@@ -200,7 +205,7 @@ JOIN MsCustomer ON MsCustomer.CustomerID = TrOrder.CustomerID
 JOIN TrOrderDetail ON TrOrder.OrderID = TrOrderDetail.OrderID
 JOIN MsFilms ON MsFilms.FilmID = TrOrderDetail.FilmID
 WHERE MsCustomer.CustomerID = @CustomerID
-
+GO
 
 CREATE PROCEDURE GetFilm @RegionName nvarchar(50), @GenreName nvarchar(50) --Number 14 
 AS
@@ -231,6 +236,7 @@ BEGIN
 	ORDER BY ReleaseDate DESC
 	END
 END
+GO
 
 CREATE PROCEDURE GetOrderByCode @OrderID nvarchar(6), @OrderDetailID nvarchar(6) --Number 15
 AS
@@ -253,7 +259,9 @@ BEGIN
 	GROUP BY TrOrder.OrderID, OrderDate, Title, ReleaseDate, Director, RentalDuration
 	END
 END
+GO
 
+-- ONCE ALL OF THE PREVIOUS COMMANDS HAVE BEEN EXECUTED, EXECUTE THE ENTIRE SELECT PORTION AND EXEC
 
 SELECT CONCAT(FirstName, ' ', LastName) as Name, CONCAT([Address],',',City) as CustAddress from MsCustomer ORDER BY DOB ASC --Number 1
 
